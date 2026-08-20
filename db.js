@@ -9,6 +9,14 @@ const __dirname = path.dirname(__filename);
 
 const DB_PATH = path.join(__dirname, 'data', 'db.json');
 
+let queue = Promise.resolve();
+
+function withDBLock(fn) {
+  const result = queue.then(fn);
+  queue = result.catch(() => {});
+  return result;
+}
+
 async function readDB() {
   const raw = await fs.readFile(DB_PATH, 'utf-8');
   return JSON.parse(raw);

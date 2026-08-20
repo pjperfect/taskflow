@@ -1,6 +1,7 @@
 // const express = require('express');
 // const path = require('path');
 // const fs = require('fs');
+import { requireAuth } from './middleware/auth.js';
 import { fileURLToPath } from 'url';
 import express from 'express';
 import path from 'path';
@@ -24,6 +25,7 @@ if (!fs.existsSync(dbPath)) {
   fs.copyFileSync(seedPath, dbPath);
 }
 
+app.use(requireAuth);
 app.use('/tasks', tasksRouter);
 app.use('/users', usersRouter);
 

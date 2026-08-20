@@ -8,16 +8,22 @@ import { readDB, writeDB, delay, withDBLock } from '../db.js';
 import { notifyAssignee } from '../utils/notify.js';
 
 // GET /tasks?page=1&pageSize=5
+// GET /tasks?dueDate=2024-06-30&page=1&pageSize=5
 router.get('/', async (req, res) => {
   const db = await readDB();
   const page = parseInt(req.query.page) || 1;
   const pageSize = parseInt(req.query.pageSize) || 5;
 
+  let tasks = db.tasks;
+  if (req.query.dueDate) {
+    tasks = tasks.filter((t) => t.dueDate === req.query.dueDate);
+  }
+
   const start = (page - 1) * pageSize;
   const end = start + pageSize;
-  const tasks = db.tasks.slice(start, end);
+  const paged = tasks.slice(start, end);
 
-  res.json({ page, pageSize, total: db.tasks.length, tasks });
+  res.json({ page, pageSize, total: tasks.length, tasks: paged });
 });
 
 // GET /tasks/:id

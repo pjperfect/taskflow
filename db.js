@@ -32,4 +32,4 @@ function delay(ms) {
 }
 
 // module.exports = { readDB, writeDB, delay };
-export { readDB, writeDB, delay };
+export { readDB, writeDB, delay, withDBLock };

@@ -1,7 +1,11 @@
-const express = require('express');
+// const express = require('express');
+// const router = express.Router();
+// const { readDB, writeDB, delay } = require('../db');
+// const { notifyAssignee } = require('../utils/notify');
+import express from 'express';
 const router = express.Router();
-const { readDB, writeDB, delay } = require('../db');
-const { notifyAssignee } = require('../utils/notify');
+import { readDB, writeDB, delay } from '../db.js';
+import { notifyAssignee } from '../utils/notify.js';
 
 // GET /tasks?page=1&pageSize=5
 router.get('/', async (req, res) => {
@@ -72,4 +76,5 @@ router.delete('/:id', async (req, res) => {
   res.status(204).end();
 });
 
-module.exports = router;
+// module.exports = router;
+export default router;

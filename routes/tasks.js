@@ -6,6 +6,7 @@ import express from 'express';
 const router = express.Router();
 import { readDB, writeDB, delay } from '../db.js';
 import { notifyAssignee } from '../utils/notify.js';
+import { readDB as readDB2 } from '../db.js';
 
 // GET /tasks?page=1&pageSize=5
 router.get('/', async (req, res) => {
@@ -79,6 +80,18 @@ router.delete('/:id', async (req, res) => {
   db.tasks = db.tasks.filter((t) => t.id !== id);
   await writeDB(db);
   res.status(204).end();
+});
+
+router.post('/bulk-delete', async (req, res) => {
+  const { ids } = req.body;
+
+  for(const id of ids) {
+    const db = await readDB();
+    db.tasks = db.tasks.filter((t) => t.id !== id);
+    await writeDB(db);
+  }
+
+  res.status(200).json({ message: 'Tasks deleted successfully' });
 });
 
 // module.exports = router;

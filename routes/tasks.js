@@ -87,6 +87,7 @@ router.delete('/:id', async (req, res) => {
   res.status(204).end();
 });
 
+// POST /tasks/bulk-delete
 router.post('/bulk-delete', async (req, res) => {
   const { ids } = req.body;
 

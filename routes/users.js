@@ -1,6 +1,9 @@
-const express = require('express');
+// const express = require('express');
+// const router = express.Router();
+// const { readDB } = require('../db');
+import express from 'express';
 const router = express.Router();
-const { readDB } = require('../db');
+import { readDB } from '../db.js';
 
 // GET /users
 router.get('/', async (req, res) => {
@@ -8,4 +11,5 @@ router.get('/', async (req, res) => {
   res.json(db.users);
 });
 
-module.exports = router;
+// module.exports = router;
+export default router;

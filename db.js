@@ -1,5 +1,11 @@
-const fs = require('fs').promises;
-const path = require('path');
+// const fs = require('fs').promises;
+// const path = require('path');
+import { fileURLToPath } from 'url';
+import fs from 'fs/promises';
+import path from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const DB_PATH = path.join(__dirname, 'data', 'db.json');
 
@@ -17,4 +23,5 @@ function delay(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-module.exports = { readDB, writeDB, delay };
+// module.exports = { readDB, writeDB, delay };
+export { readDB, writeDB, delay };

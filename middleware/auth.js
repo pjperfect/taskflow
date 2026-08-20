@@ -1,4 +1,3 @@
-
 function requireAuth(req, res, next) {
   const userId = req.header('x-user-id');
   if (!userId) {
@@ -8,4 +7,5 @@ function requireAuth(req, res, next) {
   next();
 }
 
-module.exports = { requireAuth };
+// module.exports = { requireAuth };
+export { requireAuth };

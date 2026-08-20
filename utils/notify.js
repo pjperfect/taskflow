@@ -1,4 +1,5 @@
-const { readDB } = require('../db');
+// const { readDB } = require('../db');
+import { readDB } from '../db.js';
 
 // This notifies a task's assignee that something happened to their task.
 async function notifyAssignee(task) {
@@ -8,4 +9,5 @@ async function notifyAssignee(task) {
   return true;
 }
 
-module.exports = { notifyAssignee };
+// module.exports = { notifyAssignee };
+export { notifyAssignee };

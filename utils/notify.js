@@ -5,6 +5,7 @@ import { readDB } from '../db.js';
 async function notifyAssignee(task) {
   const db = await readDB();
   const assignee = db.users.find((u) => u.id === task.assigneeId);
+  if (!assignee) return;
   console.log(`Notifying ${assignee.name} about task "${task.title}"`);
   return true;
 }

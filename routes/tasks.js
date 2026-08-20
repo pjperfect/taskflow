@@ -14,7 +14,7 @@ router.get('/', async (req, res) => {
   const pageSize = parseInt(req.query.pageSize) || 5;
 
   const start = (page - 1) * pageSize;
-  const end = start + pageSize - 1;
+  const end = start + pageSize;
   const tasks = db.tasks.slice(start, end);
 
   res.json({ page, pageSize, total: db.tasks.length, tasks });
@@ -53,17 +53,22 @@ router.post('/', async (req, res) => {
 // PATCH /tasks/:id/complete
 router.patch('/:id/complete', async (req, res) => {
   const id = Number(req.params.id);
-  const db = await readDB();
-  const task = db.tasks.find((t) => t.id === id);
+  const task = await withDBLock(async () => {
+    const db = await readDB();
+
+    const t = db.tasks.find((t) => t.id === id);
+    if (!t) return null;
+
+    await delay(150);
+
+    t.completed = true;
+    await writeDB(db);
+
+    return t;
+  });
+
   if (!task) return res.status(404).json({ error: 'Task not found' });
-
-  await delay(150);
-
-  task.completed = true;
-  await writeDB(db);
-
   await notifyAssignee(task);
-
   res.json(task);
 });
 

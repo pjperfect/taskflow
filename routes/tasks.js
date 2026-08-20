@@ -4,7 +4,7 @@
 // const { notifyAssignee } = require('../utils/notify');
 import express from 'express';
 const router = express.Router();
-import { readDB, writeDB, delay } from '../db.js';
+import { readDB, writeDB, delay, withDBLock } from '../db.js';
 import { notifyAssignee } from '../utils/notify.js';
 
 // GET /tasks?page=1&pageSize=5
@@ -79,6 +79,21 @@ router.delete('/:id', async (req, res) => {
   db.tasks = db.tasks.filter((t) => t.id !== id);
   await writeDB(db);
   res.status(204).end();
+});
+
+router.post('/bulk-delete', async (req, res) => {
+  const { ids } = req.body;
+
+  if (!Array.isArray(ids) || ids.length === 0) {
+    return res.status(400).json({ error: 'ids must be a non-empty array' });
+  }
+
+  const db = await readDB();
+  const numericIds = ids.map(Number);
+  db.tasks = db.tasks.filter((t) => !numericIds.includes(t.id));
+  await writeDB(db);
+
+  res.status(200).json({ message: 'Tasks deleted successfully' });
 });
 
 // module.exports = router;
